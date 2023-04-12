@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 
 const users = require('./routes/Users');
 const changeProfile = require('./routes/ChangeProfile');
+const messages = require('./routes/Messages');
+const UserProfiles = require('./routes/UserProfile')
 
 
 const app = express();
@@ -27,8 +29,11 @@ app.use(cors({
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(bodyParser.json());
+
 app.use('/app/users', users);
-app.use('/app/users', changeProfile);   
+app.use('/app/users', changeProfile);
+app.use('/app/messages', messages);   
+app.use('/app/users', UserProfiles)  
 
                                   
 app.listen(port, () => console.log(`Running on port ${port}`));

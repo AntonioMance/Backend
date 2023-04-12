@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const User = require("../schemas/User");
 const verify = require('../verify');
-const Message = require("../schemas/Message");
 
 router.use(async (req, res, next) => {
     console.log(req.cookies);
@@ -41,8 +40,8 @@ router.post("/removeGame/:name", async (req, res) => {
   });
   
 
-router.get("/getGames", async (req, res) => { 
-    let user = await User.findOne({ email: req.cookies.email });
+  router.get("/getGames/:username", async (req, res) => {
+    let user = await User.findOne({ username: req.params.username });
     let gameList
     console.log(user)
     try {
@@ -67,8 +66,8 @@ router.post("/AddStatus", async (req, res) => {
     return res.sendStatus(200);
 });
 
-router.get("/Getstatus", async (req, res) => {
-    let user = await User.findOne({ email: req.cookies.email });
+router.get("/Getstatus/:username", async (req, res) => {
+    let user = await User.findOne({ username: req.params.username });
     if (user) {
         return res.status(200).json({ status: user.status });
     } else {
@@ -99,8 +98,8 @@ router.post("/unfollow/:username", async (req, res) => {
     return res.sendStatus(200);
 });
 
-router.get("/getFollowList", async (req, res) => {
-    let user = await User.findOne({ email: req.cookies.email });
+router.get("/getFollowList/:username", async (req, res) => {
+    let user = await User.findOne({ username: req.params.username });
   
     if (user) {
       return res.status(200).json(user.follow);
@@ -108,71 +107,22 @@ router.get("/getFollowList", async (req, res) => {
       return res.sendStatus(404);
     }
   });
-
-
-router.post("/addAvailability", async (req, res) => {
-    let user = await User.findOne({ email: req.cookies.email });
   
-    user.availability.push({ start: req.body.start, end: req.body.end });
-  
-    user.save();
-    return res.sendStatus(200);
-  });
-  
-  router.get("/getAvailability", async (req, res) => {
-    let user = await User.findOne({ email: req.cookies.email });
+ router.get("/getAvailability/:username", async (req, res) => {
+    let user = await User.findOne({ username: req.params.username });
     if (user) {
       return res.status(200).json(user.availability);
     } else {
       return res.sendStatus(404);
     }
   });
-  
 
-  router.post("/removeAvailability", async (req, res) => {
-    let user = await User.findOne({ email: req.cookies.email });
-  
-    let availabilityList = user.availability;
-  
-    availabilityList = availabilityList.filter(
-      (item) => item.start !== req.body.start || item.end !== req.body.end
-    );
-  
-    user.availability = availabilityList;
-  
-    user.save();
-    return res.sendStatus(200);
-  });
-  
-  router.get("/getUserMessages", async (req, res) => {
-    try {
-      let user = await User.findOne({ email: req.cookies.email });
-      if (user) {
-        let messages = await Message.find({ author: user.username });
-        return res.status(200).json(messages);
-      } else {
-        return res.sendStatus(404);
-      }
-    } catch (error) {
-      console.error("Error getting user messages:", error);
-      return res.sendStatus(500);
-    }
-  });
-
-  router.post("/updatePeoplePlayedWith", async (req, res) => {
-    let user = await User.findOne({ email: req.cookies.email });
-    user.peoplePlayedWith = req.body.peoplePlayedWith;
-    await user.save();
-    return res.sendStatus(200);
-  });
-  
-  router.get("/getPeoplePlayedWith", async (req, res) => {
-    let user = await User.findOne({ email: req.cookies.email });
+  router.get("/getPeoplePlayedWith/:username", async (req, res) => {
+    let user = await User.findOne({ username: req.params.username });
     if (user) {
       return res.status(200).json({ peoplePlayedWith: user.peoplePlayedWith });
     } else {
       return res.sendStatus(404);
     }
   });
-  
 module.exports = router;
