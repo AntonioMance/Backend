@@ -4,8 +4,8 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 
-
 const users = require('./routes/Users');
+const changeProfile = require('./routes/ChangeProfile');
 
 
 const app = express();
@@ -28,6 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use('/app/users', users);
+app.use('/app/users', changeProfile);   
 
                                   
 app.listen(port, () => console.log(`Running on port ${port}`));

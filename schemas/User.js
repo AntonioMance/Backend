@@ -16,7 +16,30 @@ const User = new mongoose.Schema({
     loginToken: {
         type: mongoose.SchemaTypes.String,
     },
-    
+    gameList: {
+        type: mongoose.SchemaTypes.Array,
+        default: []
+    },
+    status: {
+        type: mongoose.SchemaTypes.Number, 
+        default: 4 
+    },
+    follow: {
+        type: mongoose.SchemaTypes.Array, 
+        default: [] 
+    },
+    availability: {
+        type: [{
+          start: String,
+          end: String
+        }],
+        default: []
+      },
+    peoplePlayedWith: {
+        type: Number,
+        default: 0,
+      },
+
 
 
 });
