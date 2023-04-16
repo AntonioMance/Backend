@@ -12,34 +12,6 @@ router.use(async (req, res, next) => {
         return;
     }    
 });
-
-
-router.post("/addGame/:name", async (req, res) => { 
-    let user = await User.findOne({ email: req.cookies.email });
-
-    let gameList = user.gameList;
-
-    gameList.push(req.params.name);
-
-    user.gameList = gameList;    
-
-    user.save();
-    return res.sendStatus(200)
-});
-router.post("/removeGame/:name", async (req, res) => {
-    let user = await User.findOne({ email: req.cookies.email });
-  
-    let gameList = user.gameList;
-  
-    gameList = gameList.filter((game) => game !== req.params.name);
-  
-    user.gameList = gameList;
-  
-    user.save();
-    return res.sendStatus(200);
-  });
-  
-
   router.get("/getGames/:username", async (req, res) => {
     let user = await User.findOne({ username: req.params.username });
     let gameList
@@ -74,30 +46,6 @@ router.get("/Getstatus/:username", async (req, res) => {
         return res.sendStatus(404);
     }
 });
-
-
-router.post("/follow/:username", async (req, res) => {
-    let user = await User.findOne({ email: req.cookies.email });
-    let userToFollow = await User.findOne({ username: req.params.username });
-
-    if (userToFollow) {
-        user.follow.push(userToFollow.username);
-        user.follow = [...new Set(user.follow)]; 
-        await user.save();
-        return res.sendStatus(200);
-    } else {
-        return res.sendStatus(404);
-    }
-});
-
-router.post("/unfollow/:username", async (req, res) => {
-    let user = await User.findOne({ email: req.cookies.email });
-
-    user.follow = user.follow.filter(username => username !== req.params.username);
-    await user.save();
-    return res.sendStatus(200);
-});
-
 router.get("/getFollowList/:username", async (req, res) => {
     let user = await User.findOne({ username: req.params.username });
   
