@@ -22,7 +22,7 @@ mongoose.connect(
 mongoose.set('strictQuery', false);
 
 app.use(cors({
-    origin: 'http://localhost:8080', 
+    origin: 'https://webapps-frontend.onrender.com', 
     credentials: true,
 }));
 
